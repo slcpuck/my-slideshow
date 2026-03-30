@@ -63,7 +63,6 @@
 <div class="hero-slideshow" id="slideshow-container"></div>
 
 <script>
-  // Your Google Sheet CSV Link
   const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSW6ZlEn1zcTW20MpfWwZ_fuqDn5YWqkZOun7V7taQrGTMAcRx5Wgm0z2BAX-VxDGBHTGJ-mP3LXF9p/pub?output=csv";
 
   let slideIndex = 0; let slides = []; let slideInterval;
@@ -105,6 +104,7 @@
   }
 
   function showSlide(index) {
+    if (!slides.length) return;
     slides.forEach(slide => slide.classList.remove('active'));
     if (index >= slides.length) { slideIndex = 0; }
     if (index < 0) { slideIndex = slides.length - 1; }
@@ -117,7 +117,8 @@
   }
 
   function startAutoSlide() {
-    slideInterval = setInterval(() => { slideIndex++; showSlide(slideIndex); }, 5000); 
+    // SET TO 7 SECONDS (7000ms)
+    slideInterval = setInterval(() => { slideIndex++; showSlide(slideIndex); }, 7000); 
   }
 </script>
 
