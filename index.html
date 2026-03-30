@@ -12,7 +12,7 @@
   body { 
     margin: 0; 
     font-family: 'Bebas Neue', sans-serif; 
-    letter-spacing: 1px; /* Gives the font a little room to breathe */
+    letter-spacing: 1px; 
   }
 
   /* Container styling */
@@ -32,6 +32,8 @@
   }
   .slide.active { opacity: 1; z-index: 1; }
   .slide a { display: block; width: 100%; height: 100%; text-decoration: none; }
+  
+  /* The Image Styling */
   .slide img {
     width: 100%; height: 100%;
     object-fit: cover;
@@ -46,7 +48,7 @@
     text-align: center; color: white; width: 80%;
   }
   
-  /* Adjusted heading sizes for Bebas Neue */
+  /* Heading sizes for Bebas Neue */
   .overlay h2 { 
     font-size: 4rem; 
     margin: 0 0 5px 0; 
@@ -70,6 +72,7 @@
   }
   .slide a:hover .shop-btn { background-color: #000; color: #fff; }
 
+  /* Arrows */
   .prev, .next {
     cursor: pointer; position: absolute; top: 50%; width: auto;
     padding: 16px; margin-top: -22px; color: white;
@@ -79,6 +82,7 @@
   .next { right: 0; }
   .prev:hover, .next:hover { background-color: rgba(0,0,0,0.8); }
 
+  /* Mobile responsiveness */
   @media (max-width: 768px) {
     .overlay h2 { font-size: 3rem; }
     .overlay p { font-size: 1.2rem; }
@@ -98,6 +102,7 @@
   let slides = [];
   let slideInterval;
 
+  // Step 1: Read the spreadsheet
   Papa.parse(sheetUrl, {
     download: true,
     header: true,
@@ -106,6 +111,7 @@
     }
   });
 
+  // Step 2: Build the HTML
   function buildSlideshow(data) {
     let container = document.getElementById('slideshow-container');
     let html = '';
@@ -117,7 +123,7 @@
       html += `
       <div class="slide ${activeClass}">
         <a href="${row.Link}">
-          <img src="https://drive.google.com/uc?export=view&id=${row.ImageID}" alt="${row.Headline}">
+          <img src="https://drive.google.com/thumbnail?id=${row.ImageID}&sz=w1920" alt="${row.Headline}">
           <div class="overlay">
             <h2>${row.Headline}</h2>
             <p>${row.Subtext}</p>
@@ -137,6 +143,7 @@
     startAutoSlide();
   }
 
+  // Step 3: Slideshow Mechanics
   function showSlide(index) {
     slides.forEach(slide => slide.classList.remove('active'));
     if (index >= slides.length) { slideIndex = 0; }
