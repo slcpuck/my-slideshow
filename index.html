@@ -8,81 +8,49 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
 <style>
-  /* Updated Font Family */
-  body { 
-    margin: 0; 
-    font-family: 'Bebas Neue', sans-serif; 
-    letter-spacing: 1px; 
-  }
+  body { margin: 0; font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
 
-  /* Container styling */
   .hero-slideshow {
-    position: relative;
-    max-width: 100%;
-    height: 70vh;
-    overflow: hidden;
-    background-color: #000;
+    position: relative; max-width: 100%; height: 70vh;
+    overflow: hidden; background-color: #000;
   }
 
   .slide {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    opacity: 0;
-    transition: opacity 0.8s ease-in-out;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0; transition: opacity 0.8s ease-in-out;
   }
   .slide.active { opacity: 1; z-index: 1; }
   .slide a { display: block; width: 100%; height: 100%; text-decoration: none; }
   
-  /* The Image Styling */
   .slide img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    filter: brightness(0.7);
-    transition: transform 0.5s ease;
+    width: 100%; height: 100%; object-fit: cover;
+    filter: brightness(0.7); transition: transform 0.5s ease;
   }
   .slide a:hover img { transform: scale(1.02); }
 
   .overlay {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
     text-align: center; color: white; width: 80%;
   }
   
-  /* Heading sizes for Bebas Neue */
-  .overlay h2 { 
-    font-size: 4rem; 
-    margin: 0 0 5px 0; 
-    letter-spacing: 3px; 
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.6); 
-  }
-  
-  .overlay p { 
-    font-size: 1.5rem; 
-    margin: 0 0 25px 0; 
-    letter-spacing: 2px;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.6); 
-  }
+  .overlay h2 { font-size: 4rem; margin: 0 0 5px 0; letter-spacing: 3px; text-shadow: 2px 2px 4px rgba(0,0,0,0.6); }
+  .overlay p { font-size: 1.5rem; margin: 0 0 25px 0; letter-spacing: 2px; text-shadow: 1px 1px 3px rgba(0,0,0,0.6); }
   
   .shop-btn {
-    display: inline-block; padding: 15px 35px;
-    background-color: #fff; color: #000;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-    transition: 0.3s ease;
+    display: inline-block; padding: 15px 35px; background-color: #fff; color: #000;
+    font-size: 1.2rem; letter-spacing: 2px; transition: 0.3s ease;
   }
   .slide a:hover .shop-btn { background-color: #000; color: #fff; }
 
-  /* Arrows */
   .prev, .next {
     cursor: pointer; position: absolute; top: 50%; width: auto;
     padding: 16px; margin-top: -22px; color: white;
-    font-size: 24px; transition: 0.3s ease;
-    user-select: none; background-color: rgba(0,0,0,0.3); z-index: 10; text-decoration: none;
+    font-size: 24px; transition: 0.3s ease; user-select: none;
+    background-color: rgba(0,0,0,0.3); z-index: 10; text-decoration: none;
   }
   .next { right: 0; }
   .prev:hover, .next:hover { background-color: rgba(0,0,0,0.8); }
 
-  /* Mobile responsiveness */
   @media (max-width: 768px) {
     .overlay h2 { font-size: 3rem; }
     .overlay p { font-size: 1.2rem; }
@@ -98,32 +66,25 @@
   // Your Google Sheet CSV Link
   const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSW6ZlEn1zcTW20MpfWwZ_fuqDn5YWqkZOun7V7taQrGTMAcRx5Wgm0z2BAX-VxDGBHTGJ-mP3LXF9p/pub?output=csv";
 
-  let slideIndex = 0;
-  let slides = [];
-  let slideInterval;
+  let slideIndex = 0; let slides = []; let slideInterval;
 
-  // Step 1: Read the spreadsheet
   Papa.parse(sheetUrl, {
-    download: true,
-    header: true,
-    complete: function(results) {
-      buildSlideshow(results.data);
-    }
+    download: true, header: true,
+    complete: function(results) { buildSlideshow(results.data); }
   });
 
-  // Step 2: Build the HTML
   function buildSlideshow(data) {
     let container = document.getElementById('slideshow-container');
     let html = '';
 
     data.forEach((row, index) => {
-      if (!row.ImageID) return; 
+      if (!row.ImageURL) return; 
       let activeClass = index === 0 ? 'active' : '';
       
       html += `
       <div class="slide ${activeClass}">
         <a href="${row.Link}">
-          <img src="https://drive.google.com/thumbnail?id=${row.ImageID}&sz=w1920" alt="${row.Headline}">
+          <img src="${row.ImageURL}" alt="${row.Headline}">
           <div class="overlay">
             <h2>${row.Headline}</h2>
             <p>${row.Subtext}</p>
@@ -143,7 +104,6 @@
     startAutoSlide();
   }
 
-  // Step 3: Slideshow Mechanics
   function showSlide(index) {
     slides.forEach(slide => slide.classList.remove('active'));
     if (index >= slides.length) { slideIndex = 0; }
@@ -152,17 +112,12 @@
   }
 
   function changeSlide(n) {
-    clearInterval(slideInterval);
-    slideIndex += n;
-    showSlide(slideIndex);
-    startAutoSlide();
+    clearInterval(slideInterval); slideIndex += n;
+    showSlide(slideIndex); startAutoSlide();
   }
 
   function startAutoSlide() {
-    slideInterval = setInterval(() => {
-      slideIndex++;
-      showSlide(slideIndex);
-    }, 5000); 
+    slideInterval = setInterval(() => { slideIndex++; showSlide(slideIndex); }, 5000); 
   }
 </script>
 
