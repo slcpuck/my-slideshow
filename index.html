@@ -4,9 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Hero Slideshow</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
 <style>
-  body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
+  /* Updated Font Family */
+  body { 
+    margin: 0; 
+    font-family: 'Bebas Neue', sans-serif; 
+    letter-spacing: 1px; /* Gives the font a little room to breathe */
+  }
 
   /* Container styling */
   .hero-slideshow {
@@ -38,12 +45,27 @@
     transform: translate(-50%, -50%);
     text-align: center; color: white; width: 80%;
   }
-  .overlay h2 { font-size: 3rem; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-  .overlay p { font-size: 1.2rem; margin: 0 0 30px 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+  
+  /* Adjusted heading sizes for Bebas Neue */
+  .overlay h2 { 
+    font-size: 4rem; 
+    margin: 0 0 5px 0; 
+    letter-spacing: 3px; 
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6); 
+  }
+  
+  .overlay p { 
+    font-size: 1.5rem; 
+    margin: 0 0 25px 0; 
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6); 
+  }
+  
   .shop-btn {
-    display: inline-block; padding: 15px 30px;
+    display: inline-block; padding: 15px 35px;
     background-color: #fff; color: #000;
-    font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
     transition: 0.3s ease;
   }
   .slide a:hover .shop-btn { background-color: #000; color: #fff; }
@@ -51,23 +73,22 @@
   .prev, .next {
     cursor: pointer; position: absolute; top: 50%; width: auto;
     padding: 16px; margin-top: -22px; color: white;
-    font-weight: bold; font-size: 24px; transition: 0.3s ease;
+    font-size: 24px; transition: 0.3s ease;
     user-select: none; background-color: rgba(0,0,0,0.3); z-index: 10; text-decoration: none;
   }
   .next { right: 0; }
   .prev:hover, .next:hover { background-color: rgba(0,0,0,0.8); }
 
   @media (max-width: 768px) {
-    .overlay h2 { font-size: 2rem; }
-    .overlay p { font-size: 1rem; }
+    .overlay h2 { font-size: 3rem; }
+    .overlay p { font-size: 1.2rem; }
     .hero-slideshow { height: 50vh; }
   }
 </style>
 </head>
 <body>
 
-<div class="hero-slideshow" id="slideshow-container">
-  </div>
+<div class="hero-slideshow" id="slideshow-container"></div>
 
 <script>
   // Your Google Sheet CSV Link
@@ -77,7 +98,6 @@
   let slides = [];
   let slideInterval;
 
-  // Step 1: Fetch and read the Google Sheet
   Papa.parse(sheetUrl, {
     download: true,
     header: true,
@@ -86,15 +106,12 @@
     }
   });
 
-  // Step 2: Build the HTML from the sheet data
   function buildSlideshow(data) {
     let container = document.getElementById('slideshow-container');
     let html = '';
 
-    // Loop through each row in your spreadsheet
     data.forEach((row, index) => {
-      if (!row.ImageID) return; // Skip empty rows
-      
+      if (!row.ImageID) return; 
       let activeClass = index === 0 ? 'active' : '';
       
       html += `
@@ -110,21 +127,16 @@
       </div>`;
     });
 
-    // Add the arrows
     html += `
       <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
       <a class="next" onclick="changeSlide(1)">&#10095;</a>
     `;
 
-    // Inject everything into the page
     container.innerHTML = html;
-
-    // Start the slideshow logic
     slides = document.querySelectorAll('.slide');
     startAutoSlide();
   }
 
-  // Step 3: Slideshow Mechanics
   function showSlide(index) {
     slides.forEach(slide => slide.classList.remove('active'));
     if (index >= slides.length) { slideIndex = 0; }
