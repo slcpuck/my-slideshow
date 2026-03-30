@@ -11,8 +11,11 @@
   body { margin: 0; font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
 
   .hero-slideshow {
-    position: relative; max-width: 100%; height: 600px;
-    overflow: hidden; background-color: #000;
+    position: relative; 
+    max-width: 100%; 
+    height: 600px; /* Locked height */
+    overflow: hidden; 
+    background-color: #000;
   }
 
   .slide {
@@ -54,7 +57,7 @@
   @media (max-width: 768px) {
     .overlay h2 { font-size: 3rem; }
     .overlay p { font-size: 1.2rem; }
-    .hero-slideshow { height: 50vh; }
+    .hero-slideshow { height: 450px; } /* Slightly shorter for mobile */
   }
 </style>
 </head>
@@ -82,7 +85,7 @@
       
       html += `
       <div class="slide ${activeClass}">
-        <a href="${row.Link}">
+        <a href="${row.Link}" target="_top">
           <img src="${row.ImageURL}" alt="${row.Headline}">
           <div class="overlay">
             <h2>${row.Headline}</h2>
@@ -117,7 +120,6 @@
   }
 
   function startAutoSlide() {
-    // SET TO 7 SECONDS (7000ms)
     slideInterval = setInterval(() => { slideIndex++; showSlide(slideIndex); }, 7000); 
   }
 </script>
