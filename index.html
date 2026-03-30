@@ -5,11 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Hero Slideshow</title>
 <style>
+  body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Clean font like VG */
+  }
+
   /* Container styling */
   .hero-slideshow {
     position: relative;
     max-width: 100%;
-    height: 60vh; /* Adjust height as needed */
+    height: 70vh; /* Made slightly taller to accommodate text */
     overflow: hidden;
     background-color: #000;
   }
@@ -27,14 +32,71 @@
 
   .slide.active {
     opacity: 1;
-    z-index: 1; /* Ensures the active link is clickable */
+    z-index: 1;
   }
 
-  /* Make images cover the container */
+  /* The clickable link that wraps everything */
+  .slide a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none; /* Removes underline from text */
+  }
+
+  /* Make images cover the container and add a slight dark tint for text readability */
   .slide img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: brightness(0.7); /* Darkens the image slightly */
+    transition: transform 0.5s ease;
+  }
+  
+  /* Optional: Slight zoom effect on hover */
+  .slide a:hover img {
+    transform: scale(1.02);
+  }
+
+  /* Overlay Text & Button Styling */
+  .overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    width: 80%; /* Prevents text from hitting the edges */
+  }
+
+  .overlay h2 {
+    font-size: 3rem;
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  }
+
+  .overlay p {
+    font-size: 1.2rem;
+    margin: 0 0 30px 0;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  }
+
+  .shop-btn {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #fff;
+    color: #000;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* When the user hovers anywhere on the slide link, highlight the button */
+  .slide a:hover .shop-btn {
+    background-color: #000;
+    color: #fff;
   }
 
   /* Navigation Arrows */
@@ -51,32 +113,55 @@
     transition: 0.3s ease;
     user-select: none;
     background-color: rgba(0,0,0,0.3);
-    z-index: 10; /* Keeps arrows above the clickable images */
+    z-index: 10;
     text-decoration: none;
   }
 
   .next { right: 0; }
   .prev:hover, .next:hover { background-color: rgba(0,0,0,0.8); }
+
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .overlay h2 { font-size: 2rem; }
+    .overlay p { font-size: 1rem; }
+    .hero-slideshow { height: 50vh; }
+  }
 </style>
 </head>
 <body>
 
 <div class="hero-slideshow">
+  
   <div class="slide active">
     <a href="https://your-target-link-here.com/shop">
       <img src="https://drive.google.com/uc?export=view&id=YOUR_IMAGE_1_ID" alt="Hero Image 1">
+      <div class="overlay">
+        <h2>New Arrivals</h2>
+        <p>Built by fans, for fans.</p>
+        <span class="shop-btn">Shop Now</span>
+      </div>
     </a>
   </div>
   
   <div class="slide">
     <a href="#">
       <img src="https://drive.google.com/uc?export=view&id=YOUR_IMAGE_2_ID" alt="Hero Image 2">
+      <div class="overlay">
+        <h2>Restocked Hoodies</h2>
+        <p>Grab them before they're gone again.</p>
+        <span class="shop-btn">Shop Restocks</span>
+      </div>
     </a>
   </div>
 
   <div class="slide">
     <a href="#">
       <img src="https://drive.google.com/uc?export=view&id=YOUR_IMAGE_3_ID" alt="Hero Image 3">
+      <div class="overlay">
+        <h2>Clearance Event</h2>
+        <p>Up to 50% off select gear.</p>
+        <span class="shop-btn">View Clearance</span>
+      </div>
     </a>
   </div>
 
