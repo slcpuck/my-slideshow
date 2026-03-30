@@ -4,123 +4,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Hero Slideshow</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
-  body {
-    margin: 0;
-    font-family: 'Helvetica Neue', Arial, sans-serif; /* Clean font like VG */
-  }
+  body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
 
   /* Container styling */
   .hero-slideshow {
     position: relative;
     max-width: 100%;
-    height: 70vh; /* Made slightly taller to accommodate text */
+    height: 70vh;
     overflow: hidden;
     background-color: #000;
   }
 
-  /* Individual slides */
   .slide {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     opacity: 0;
     transition: opacity 0.8s ease-in-out;
   }
-
-  .slide.active {
-    opacity: 1;
-    z-index: 1;
-  }
-
-  /* The clickable link that wraps everything */
-  .slide a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    text-decoration: none; /* Removes underline from text */
-  }
-
-  /* Make images cover the container and add a slight dark tint for text readability */
+  .slide.active { opacity: 1; z-index: 1; }
+  .slide a { display: block; width: 100%; height: 100%; text-decoration: none; }
   .slide img {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     object-fit: cover;
-    filter: brightness(0.7); /* Darkens the image slightly */
+    filter: brightness(0.7);
     transition: transform 0.5s ease;
   }
-  
-  /* Optional: Slight zoom effect on hover */
-  .slide a:hover img {
-    transform: scale(1.02);
-  }
+  .slide a:hover img { transform: scale(1.02); }
 
-  /* Overlay Text & Button Styling */
   .overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    position: absolute; top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    text-align: center;
-    color: white;
-    width: 80%; /* Prevents text from hitting the edges */
+    text-align: center; color: white; width: 80%;
   }
-
-  .overlay h2 {
-    font-size: 3rem;
-    margin: 0 0 10px 0;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-  }
-
-  .overlay p {
-    font-size: 1.2rem;
-    margin: 0 0 30px 0;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-  }
-
+  .overlay h2 { font-size: 3rem; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+  .overlay p { font-size: 1.2rem; margin: 0 0 30px 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
   .shop-btn {
-    display: inline-block;
-    padding: 15px 30px;
-    background-color: #fff;
-    color: #000;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  /* When the user hovers anywhere on the slide link, highlight the button */
-  .slide a:hover .shop-btn {
-    background-color: #000;
-    color: #fff;
-  }
-
-  /* Navigation Arrows */
-  .prev, .next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    width: auto;
-    padding: 16px;
-    margin-top: -22px;
-    color: white;
-    font-weight: bold;
-    font-size: 24px;
+    display: inline-block; padding: 15px 30px;
+    background-color: #fff; color: #000;
+    font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
     transition: 0.3s ease;
-    user-select: none;
-    background-color: rgba(0,0,0,0.3);
-    z-index: 10;
-    text-decoration: none;
   }
+  .slide a:hover .shop-btn { background-color: #000; color: #fff; }
 
+  .prev, .next {
+    cursor: pointer; position: absolute; top: 50%; width: auto;
+    padding: 16px; margin-top: -22px; color: white;
+    font-weight: bold; font-size: 24px; transition: 0.3s ease;
+    user-select: none; background-color: rgba(0,0,0,0.3); z-index: 10; text-decoration: none;
+  }
   .next { right: 0; }
   .prev:hover, .next:hover { background-color: rgba(0,0,0,0.8); }
 
-  /* Mobile responsiveness */
   @media (max-width: 768px) {
     .overlay h2 { font-size: 2rem; }
     .overlay p { font-size: 1rem; }
@@ -130,50 +66,65 @@
 </head>
 <body>
 
-<div class="hero-slideshow">
-  
-  <div class="slide active">
-    <a href="https://your-target-link-here.com/shop">
-      <img src="https://drive.google.com/uc?export=view&id=YOUR_IMAGE_1_ID" alt="Hero Image 1">
-      <div class="overlay">
-        <h2>New Arrivals</h2>
-        <p>Built by fans, for fans.</p>
-        <span class="shop-btn">Shop Now</span>
-      </div>
-    </a>
+<div class="hero-slideshow" id="slideshow-container">
   </div>
-  
-  <div class="slide">
-    <a href="#">
-      <img src="https://drive.google.com/uc?export=view&id=YOUR_IMAGE_2_ID" alt="Hero Image 2">
-      <div class="overlay">
-        <h2>Restocked Hoodies</h2>
-        <p>Grab them before they're gone again.</p>
-        <span class="shop-btn">Shop Restocks</span>
-      </div>
-    </a>
-  </div>
-
-  <div class="slide">
-    <a href="#">
-      <img src="https://drive.google.com/uc?export=view&id=YOUR_IMAGE_3_ID" alt="Hero Image 3">
-      <div class="overlay">
-        <h2>Clearance Event</h2>
-        <p>Up to 50% off select gear.</p>
-        <span class="shop-btn">View Clearance</span>
-      </div>
-    </a>
-  </div>
-
-  <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
-  <a class="next" onclick="changeSlide(1)">&#10095;</a>
-</div>
 
 <script>
+  // Your Google Sheet CSV Link
+  const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSW6ZlEn1zcTW20MpfWwZ_fuqDn5YWqkZOun7V7taQrGTMAcRx5Wgm0z2BAX-VxDGBHTGJ-mP3LXF9p/pub?output=csv";
+
   let slideIndex = 0;
-  let slides = document.querySelectorAll('.slide');
+  let slides = [];
   let slideInterval;
 
+  // Step 1: Fetch and read the Google Sheet
+  Papa.parse(sheetUrl, {
+    download: true,
+    header: true,
+    complete: function(results) {
+      buildSlideshow(results.data);
+    }
+  });
+
+  // Step 2: Build the HTML from the sheet data
+  function buildSlideshow(data) {
+    let container = document.getElementById('slideshow-container');
+    let html = '';
+
+    // Loop through each row in your spreadsheet
+    data.forEach((row, index) => {
+      if (!row.ImageID) return; // Skip empty rows
+      
+      let activeClass = index === 0 ? 'active' : '';
+      
+      html += `
+      <div class="slide ${activeClass}">
+        <a href="${row.Link}">
+          <img src="https://drive.google.com/uc?export=view&id=${row.ImageID}" alt="${row.Headline}">
+          <div class="overlay">
+            <h2>${row.Headline}</h2>
+            <p>${row.Subtext}</p>
+            <span class="shop-btn">${row.ButtonText}</span>
+          </div>
+        </a>
+      </div>`;
+    });
+
+    // Add the arrows
+    html += `
+      <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+      <a class="next" onclick="changeSlide(1)">&#10095;</a>
+    `;
+
+    // Inject everything into the page
+    container.innerHTML = html;
+
+    // Start the slideshow logic
+    slides = document.querySelectorAll('.slide');
+    startAutoSlide();
+  }
+
+  // Step 3: Slideshow Mechanics
   function showSlide(index) {
     slides.forEach(slide => slide.classList.remove('active'));
     if (index >= slides.length) { slideIndex = 0; }
@@ -194,9 +145,6 @@
       showSlide(slideIndex);
     }, 5000); 
   }
-
-  showSlide(slideIndex);
-  startAutoSlide();
 </script>
 
 </body>
